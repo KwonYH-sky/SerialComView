@@ -47,6 +47,7 @@
             baudRateLabel = new Label();
             selBaudRate = new ComboBox();
             portNmLabel = new Label();
+            portStatusLabel = new Label();
             serialGroupBox.SuspendLayout();
             SuspendLayout();
             // 
@@ -61,6 +62,7 @@
             // 
             // serialGroupBox
             // 
+            serialGroupBox.Controls.Add(portStatusLabel);
             serialGroupBox.Controls.Add(closeBtn);
             serialGroupBox.Controls.Add(openBth);
             serialGroupBox.Controls.Add(writeTimeOutLabel);
@@ -117,6 +119,7 @@
             // selWriteTimeout
             // 
             selWriteTimeout.FormattingEnabled = true;
+            selWriteTimeout.Items.AddRange(new object[] { "500" });
             selWriteTimeout.Location = new Point(99, 225);
             selWriteTimeout.Name = "selWriteTimeout";
             selWriteTimeout.Size = new Size(124, 23);
@@ -134,6 +137,7 @@
             // selReadTimeout
             // 
             selReadTimeout.FormattingEnabled = true;
+            selReadTimeout.Items.AddRange(new object[] { "500" });
             selReadTimeout.Location = new Point(99, 196);
             selReadTimeout.Name = "selReadTimeout";
             selReadTimeout.Size = new Size(124, 23);
@@ -152,6 +156,7 @@
             // 
             selHandShake.DropDownStyle = ComboBoxStyle.DropDownList;
             selHandShake.FormattingEnabled = true;
+            selHandShake.Items.AddRange(new object[] { "None", "XOnXOff", "RequestToSend", "RequestToSendXOnXOff" });
             selHandShake.Location = new Point(99, 167);
             selHandShake.Name = "selHandShake";
             selHandShake.Size = new Size(124, 23);
@@ -170,6 +175,7 @@
             // 
             selStopBits.DropDownStyle = ComboBoxStyle.DropDownList;
             selStopBits.FormattingEnabled = true;
+            selStopBits.Items.AddRange(new object[] { "One", "Two", "OnePointFive" });
             selStopBits.Location = new Point(99, 138);
             selStopBits.Name = "selStopBits";
             selStopBits.Size = new Size(124, 23);
@@ -188,6 +194,7 @@
             // 
             selParity.DropDownStyle = ComboBoxStyle.DropDownList;
             selParity.FormattingEnabled = true;
+            selParity.Items.AddRange(new object[] { "None", "Odd", "Even", "Mark", "Spec" });
             selParity.Location = new Point(99, 109);
             selParity.Name = "selParity";
             selParity.Size = new Size(124, 23);
@@ -240,6 +247,16 @@
             portNmLabel.TabIndex = 1;
             portNmLabel.Text = "포트 이름";
             // 
+            // portStatusLabel
+            // 
+            portStatusLabel.AutoSize = true;
+            portStatusLabel.Font = new Font("맑은 고딕", 16F);
+            portStatusLabel.Location = new Point(46, 305);
+            portStatusLabel.Name = "portStatusLabel";
+            portStatusLabel.Size = new Size(142, 30);
+            portStatusLabel.TabIndex = 17;
+            portStatusLabel.Text = "Not Connect";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -275,5 +292,6 @@
         private ComboBox selWriteTimeout;
         private Button openBth;
         private Button closeBtn;
+        private Label portStatusLabel;
     }
 }
