@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) [year] [fullname]
+Copyright (c) 2024 KwonYH-Sky
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +19,10 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+허가 hereby granted, 무제한적이고 영구적으로 다음의 조건을 충족하는 모든 사람에게 이 소프트웨어와 관련 문서 파일(이하 "소프트웨어")을 사용할 수 있는 권한을 부여합니다:
+
+1. 소프트웨어의 복사본 또는 중요한 부분을 포함하여 소프트웨어를 사용, 복사, 수정, 병합, 발행, 배포, 재라이선스 및 판매할 수 있는 권한.
+2. 위의 저작권 고지와 본 허가 고지를 모든 소프트웨어의 복사본 또는 중요한 부분에 포함해야 합니다.
+
+소프트웨어는 "있는 그대로" 제공되며, 명시적이든 묵시적이든 어떤 종류의 보증도 제공되지 않습니다. 저작권자는 소프트웨어의 사용이나 기타 권리 행사의 결과로 발생하는 손해에 대해 책임을 지지 않습니다.

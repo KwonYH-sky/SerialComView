@@ -28,16 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             selPortName = new ComboBox();
             serialGroupBox = new GroupBox();
+            portStatusLabel = new Label();
             closeBtn = new Button();
-            openBth = new Button();
+            openBtn = new Button();
             writeTimeOutLabel = new Label();
             selWriteTimeout = new ComboBox();
             readTimeoutLabel = new Label();
             selReadTimeout = new ComboBox();
             handshakeLabel = new Label();
-            selHandShake = new ComboBox();
+            selHandshake = new ComboBox();
             stopBitsLabel = new Label();
             selStopBits = new ComboBox();
             parityLabel = new Label();
@@ -47,8 +49,16 @@
             baudRateLabel = new Label();
             selBaudRate = new ComboBox();
             portNmLabel = new Label();
-            portStatusLabel = new Label();
+            dataRxRiTextBox = new RichTextBox();
+            dataRxGrupBox = new GroupBox();
+            dataTxGroupBox = new GroupBox();
+            loopTimeTextBox = new TextBox();
+            loopTxCheck = new CheckBox();
+            dataSendBtn = new Button();
+            dataTxTextBox = new TextBox();
             serialGroupBox.SuspendLayout();
+            dataRxGrupBox.SuspendLayout();
+            dataTxGroupBox.SuspendLayout();
             SuspendLayout();
             // 
             // selPortName
@@ -64,13 +74,13 @@
             // 
             serialGroupBox.Controls.Add(portStatusLabel);
             serialGroupBox.Controls.Add(closeBtn);
-            serialGroupBox.Controls.Add(openBth);
+            serialGroupBox.Controls.Add(openBtn);
             serialGroupBox.Controls.Add(writeTimeOutLabel);
             serialGroupBox.Controls.Add(selWriteTimeout);
             serialGroupBox.Controls.Add(readTimeoutLabel);
             serialGroupBox.Controls.Add(selReadTimeout);
             serialGroupBox.Controls.Add(handshakeLabel);
-            serialGroupBox.Controls.Add(selHandShake);
+            serialGroupBox.Controls.Add(selHandshake);
             serialGroupBox.Controls.Add(stopBitsLabel);
             serialGroupBox.Controls.Add(selStopBits);
             serialGroupBox.Controls.Add(parityLabel);
@@ -88,24 +98,36 @@
             serialGroupBox.TabStop = false;
             serialGroupBox.Text = "시리얼 정보";
             // 
+            // portStatusLabel
+            // 
+            portStatusLabel.AutoSize = true;
+            portStatusLabel.Font = new Font("맑은 고딕", 16F);
+            portStatusLabel.Location = new Point(81, 315);
+            portStatusLabel.Name = "portStatusLabel";
+            portStatusLabel.Size = new Size(67, 30);
+            portStatusLabel.TabIndex = 17;
+            portStatusLabel.Text = "Close";
+            // 
             // closeBtn
             // 
+            closeBtn.Enabled = false;
             closeBtn.Location = new Point(117, 386);
             closeBtn.Name = "closeBtn";
             closeBtn.Size = new Size(112, 34);
             closeBtn.TabIndex = 16;
             closeBtn.Text = "Close";
             closeBtn.UseVisualStyleBackColor = true;
+            closeBtn.Click += closeBtn_Click;
             // 
-            // openBth
+            // openBtn
             // 
-            openBth.Location = new Point(6, 386);
-            openBth.Name = "openBth";
-            openBth.Size = new Size(105, 34);
-            openBth.TabIndex = 2;
-            openBth.Text = "Open";
-            openBth.UseVisualStyleBackColor = true;
-            openBth.Click += openBtn_Click;
+            openBtn.Location = new Point(6, 386);
+            openBtn.Name = "openBtn";
+            openBtn.Size = new Size(105, 34);
+            openBtn.TabIndex = 2;
+            openBtn.Text = "Open";
+            openBtn.UseVisualStyleBackColor = true;
+            openBtn.Click += openBtn_Click;
             // 
             // writeTimeOutLabel
             // 
@@ -152,15 +174,15 @@
             handshakeLabel.TabIndex = 11;
             handshakeLabel.Text = "핸드세이크";
             // 
-            // selHandShake
+            // selHandshake
             // 
-            selHandShake.DropDownStyle = ComboBoxStyle.DropDownList;
-            selHandShake.FormattingEnabled = true;
-            selHandShake.Items.AddRange(new object[] { "None", "XOnXOff", "RequestToSend", "RequestToSendXOnXOff" });
-            selHandShake.Location = new Point(99, 167);
-            selHandShake.Name = "selHandShake";
-            selHandShake.Size = new Size(124, 23);
-            selHandShake.TabIndex = 10;
+            selHandshake.DropDownStyle = ComboBoxStyle.DropDownList;
+            selHandshake.FormattingEnabled = true;
+            selHandshake.Items.AddRange(new object[] { "None", "XOnXOff", "RequestToSend", "RequestToSendXOnXOff" });
+            selHandshake.Location = new Point(99, 167);
+            selHandshake.Name = "selHandshake";
+            selHandshake.Size = new Size(124, 23);
+            selHandshake.TabIndex = 10;
             // 
             // stopBitsLabel
             // 
@@ -175,7 +197,7 @@
             // 
             selStopBits.DropDownStyle = ComboBoxStyle.DropDownList;
             selStopBits.FormattingEnabled = true;
-            selStopBits.Items.AddRange(new object[] { "One", "Two", "OnePointFive" });
+            selStopBits.Items.AddRange(new object[] { "One", "Two", "OnePointFive (특정 기기 호환안됨)" });
             selStopBits.Location = new Point(99, 138);
             selStopBits.Name = "selStopBits";
             selStopBits.Size = new Size(124, 23);
@@ -247,27 +269,91 @@
             portNmLabel.TabIndex = 1;
             portNmLabel.Text = "포트 이름";
             // 
-            // portStatusLabel
+            // dataRxRiTextBox
             // 
-            portStatusLabel.AutoSize = true;
-            portStatusLabel.Font = new Font("맑은 고딕", 16F);
-            portStatusLabel.Location = new Point(46, 305);
-            portStatusLabel.Name = "portStatusLabel";
-            portStatusLabel.Size = new Size(142, 30);
-            portStatusLabel.TabIndex = 17;
-            portStatusLabel.Text = "Not Connect";
+            dataRxRiTextBox.Location = new Point(16, 22);
+            dataRxRiTextBox.Name = "dataRxRiTextBox";
+            dataRxRiTextBox.Size = new Size(371, 284);
+            dataRxRiTextBox.TabIndex = 18;
+            dataRxRiTextBox.Text = "";
+            // 
+            // dataRxGrupBox
+            // 
+            dataRxGrupBox.Controls.Add(dataRxRiTextBox);
+            dataRxGrupBox.Location = new Point(272, 12);
+            dataRxGrupBox.Name = "dataRxGrupBox";
+            dataRxGrupBox.Size = new Size(405, 323);
+            dataRxGrupBox.TabIndex = 19;
+            dataRxGrupBox.TabStop = false;
+            dataRxGrupBox.Text = "데이터";
+            // 
+            // dataTxGroupBox
+            // 
+            dataTxGroupBox.Controls.Add(loopTimeTextBox);
+            dataTxGroupBox.Controls.Add(loopTxCheck);
+            dataTxGroupBox.Controls.Add(dataSendBtn);
+            dataTxGroupBox.Controls.Add(dataTxTextBox);
+            dataTxGroupBox.Enabled = false;
+            dataTxGroupBox.Location = new Point(272, 341);
+            dataTxGroupBox.Name = "dataTxGroupBox";
+            dataTxGroupBox.Size = new Size(405, 97);
+            dataTxGroupBox.TabIndex = 20;
+            dataTxGroupBox.TabStop = false;
+            dataTxGroupBox.Text = "데이터 보내기";
+            // 
+            // loopTimeTextBox
+            // 
+            loopTimeTextBox.Enabled = false;
+            loopTimeTextBox.Location = new Point(336, 22);
+            loopTimeTextBox.Name = "loopTimeTextBox";
+            loopTimeTextBox.Size = new Size(51, 23);
+            loopTimeTextBox.TabIndex = 20;
+            // 
+            // loopTxCheck
+            // 
+            loopTxCheck.AutoSize = true;
+            loopTxCheck.Location = new Point(274, 24);
+            loopTxCheck.Name = "loopTxCheck";
+            loopTxCheck.Size = new Size(56, 19);
+            loopTxCheck.TabIndex = 19;
+            loopTxCheck.Text = "반복?";
+            loopTxCheck.UseVisualStyleBackColor = true;
+            loopTxCheck.CheckedChanged += loopTxCheck_CheckedChanged;
+            // 
+            // dataSendBtn
+            // 
+            dataSendBtn.Location = new Point(16, 57);
+            dataSendBtn.Name = "dataSendBtn";
+            dataSendBtn.Size = new Size(371, 34);
+            dataSendBtn.TabIndex = 1;
+            dataSendBtn.Text = "Data Send";
+            dataSendBtn.UseVisualStyleBackColor = true;
+            dataSendBtn.Click += DataSendBtn_ClickEvent;
+            // 
+            // dataTxTextBox
+            // 
+            dataTxTextBox.Location = new Point(16, 22);
+            dataTxTextBox.Name = "dataTxTextBox";
+            dataTxTextBox.Size = new Size(219, 23);
+            dataTxTextBox.TabIndex = 0;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(690, 450);
+            Controls.Add(dataTxGroupBox);
             Controls.Add(serialGroupBox);
+            Controls.Add(dataRxGrupBox);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "MainForm";
             Text = "SerialComView";
             Load += MainForm_Load;
             serialGroupBox.ResumeLayout(false);
             serialGroupBox.PerformLayout();
+            dataRxGrupBox.ResumeLayout(false);
+            dataTxGroupBox.ResumeLayout(false);
+            dataTxGroupBox.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -279,7 +365,7 @@
         private Label readTimeoutLabel;
         private ComboBox selReadTimeout;
         private Label handshakeLabel;
-        private ComboBox selHandShake;
+        private ComboBox selHandshake;
         private Label stopBitsLabel;
         private ComboBox selStopBits;
         private Label parityLabel;
@@ -290,8 +376,15 @@
         private ComboBox selBaudRate;
         private Label writeTimeOutLabel;
         private ComboBox selWriteTimeout;
-        private Button openBth;
+        private Button openBtn;
         private Button closeBtn;
         private Label portStatusLabel;
+        private RichTextBox dataRxRiTextBox;
+        private GroupBox dataRxGrupBox;
+        private GroupBox dataTxGroupBox;
+        private Button dataSendBtn;
+        private TextBox dataTxTextBox;
+        private CheckBox loopTxCheck;
+        private TextBox loopTimeTextBox;
     }
 }
