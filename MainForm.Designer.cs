@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             selPortName = new ComboBox();
             serialGroupBox = new GroupBox();
@@ -56,6 +57,7 @@
             loopTxCheck = new CheckBox();
             dataSendBtn = new Button();
             dataTxTextBox = new TextBox();
+            loopSendTimer = new System.Windows.Forms.Timer(components);
             serialGroupBox.SuspendLayout();
             dataRxGrupBox.SuspendLayout();
             dataTxGroupBox.SuspendLayout();
@@ -308,6 +310,9 @@
             loopTimeTextBox.Name = "loopTimeTextBox";
             loopTimeTextBox.Size = new Size(51, 23);
             loopTimeTextBox.TabIndex = 20;
+            loopTimeTextBox.Text = "100";
+            loopTimeTextBox.TextAlign = HorizontalAlignment.Right;
+            loopTimeTextBox.TextChanged += loopTimeTextBox_TextChanged;
             // 
             // loopTxCheck
             // 
@@ -336,6 +341,10 @@
             dataTxTextBox.Name = "dataTxTextBox";
             dataTxTextBox.Size = new Size(219, 23);
             dataTxTextBox.TabIndex = 0;
+            // 
+            // loopSendTimer
+            // 
+            loopSendTimer.Tick += loopSendTimer_Tick;
             // 
             // MainForm
             // 
@@ -386,5 +395,6 @@
         private TextBox dataTxTextBox;
         private CheckBox loopTxCheck;
         private TextBox loopTimeTextBox;
+        private System.Windows.Forms.Timer loopSendTimer;
     }
 }

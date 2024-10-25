@@ -5,8 +5,6 @@ namespace SerialComView
     public partial class MainForm : Form
     {
         private bool isLoopTx;
-        private Thread loopTxThread;
-
         SerialPort serialPort = new SerialPort();
 
         public MainForm()
@@ -63,28 +61,19 @@ namespace SerialComView
                 portStatusLabel.Text = "Open";
                 portStatusLabel.ForeColor = Color.Green;
 
-                selPortName.Enabled = false;
-                selBaudRate.Enabled = false;
-                selDataBits.Enabled = false;
-                selParity.Enabled = false;
-                selStopBits.Enabled = false;
-                selHandshake.Enabled = false;
-                selReadTimeout.Enabled = false;
-                selWriteTimeout.Enabled = false;
-
-                openBtn.Enabled = false;
-                closeBtn.Enabled = true;
-
+                SetControl(false);
                 dataRxRiTextBox.Text = "";
-                dataTxGroupBox.Enabled = true;
             }
 
         }
 
         private void closeBtn_Click(object sender, EventArgs e)
         {
-            
-            loopTxThread.Interrupt();
+            if (loopSendTimer.Enabled)
+            {
+                StopLoopTransmission();
+                loopSendTimer.Dispose();
+            }
             serialPort.Close();
             serialPort.Dispose();
 
@@ -92,22 +81,10 @@ namespace SerialComView
             {
                 portStatusLabel.Text = "Close";
                 portStatusLabel.ForeColor = Color.Red;
-
-                selPortName.Enabled = true;
-                selBaudRate.Enabled = true;
-                selDataBits.Enabled = true;
-                selParity.Enabled = true;
-                selStopBits.Enabled = true;
-                selHandshake.Enabled = true;
-                selReadTimeout.Enabled = true;
-                selWriteTimeout.Enabled = true;
-
-                openBtn.Enabled = true;
-                closeBtn.Enabled = false;
-
-                dataTxGroupBox.Enabled = false;
+                SetControl(true);
             }
         }
+
 
         private void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
@@ -129,34 +106,16 @@ namespace SerialComView
             {
                 if (isLoopTx)
                 {
-                    isLoopTx = false;
-                    loopTxThread.Join();
-                    loopTxCheck.Enabled = true;
-                    loopTimeTextBox.Enabled = true;
-                    dataTxTextBox.Enabled = true;
-
-                    dataSendBtn.Text = "Data Send";
+                    StopLoopTransmission();
+                    return;
                 }
 
                 if (loopTxCheck.Checked)
                 {
                     isLoopTx = true;
-                    loopTxThread = new Thread(() =>
-                    {
-                        int loopTime = Convert.ToInt32(loopTimeTextBox.Text);
-                        while (isLoopTx)
-                        {
-                            this.Invoke(new Action(() =>
-                            {
-                                serialPort.Write(dataTxTextBox.Text);
-                                dataRxRiTextBox.SelectionColor = Color.Red;
-                                if (!string.IsNullOrEmpty(dataTxTextBox.Text))
-                                    dataRxRiTextBox.AppendText(dataTxTextBox.Text);
-                            }));
-
-                            Thread.Sleep(loopTime);
-                        }
-                    });
+                    int loopInterval = Convert.ToInt32(loopTimeTextBox.Text);
+                    loopSendTimer.Interval = loopInterval <= 0 ? 10 : loopInterval;
+                    loopSendTimer.Start();
 
                     loopTxCheck.Enabled = false;
                     loopTimeTextBox.Enabled = false;
@@ -164,7 +123,6 @@ namespace SerialComView
 
                     dataSendBtn.Text = "메시지 전송중지";
 
-                    loopTxThread.Start();
                 }
                 else
                 {
@@ -176,6 +134,43 @@ namespace SerialComView
             }
             else
                 MessageBox.Show("포트 닫혀있음", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        private void loopTxCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            if (loopTxCheck.Checked)
+                loopTimeTextBox.Enabled = true;
+            else
+                loopTimeTextBox.Enabled = false;
+        }
+
+        private void loopSendTimer_Tick(object sender, EventArgs e)
+        {
+            this.Invoke(() =>
+            {
+                serialPort.Write(dataTxTextBox.Text);
+                dataRxRiTextBox.SelectionColor = Color.Red;
+                if (!string.IsNullOrEmpty(dataTxTextBox.Text))
+                    dataRxRiTextBox.AppendText(dataTxTextBox.Text);
+            });
+        }
+
+        private void loopTimeTextBox_TextChanged(object sender, EventArgs e)
+        {
+            int loopInterval = Convert.ToInt32(loopTimeTextBox.Text);
+            loopTimeTextBox.Text = loopInterval <= 0 ? "10" : loopInterval.ToString();
+        }
+
+        private void StopLoopTransmission()
+        {
+            isLoopTx = false;
+            loopSendTimer.Stop();
+            loopTxCheck.Enabled = true;
+            loopTimeTextBox.Enabled = true;
+            dataTxTextBox.Enabled = true;
+
+            dataSendBtn.Text = "Data Send";
+            return;
         }
 
         public static Parity SelParityToParity(int selIndex) => selIndex switch
@@ -205,12 +200,22 @@ namespace SerialComView
             _ => Handshake.None,
         };
 
-        private void loopTxCheck_CheckedChanged(object sender, EventArgs e)
+        private void SetControl(bool isClose)
         {
-            if (loopTxCheck.Checked)
-                loopTimeTextBox.Enabled = true;
-            else
-                loopTimeTextBox.Enabled = false;
+            selPortName.Enabled = isClose;
+            selBaudRate.Enabled = isClose;
+            selDataBits.Enabled = isClose;
+            selParity.Enabled = isClose;
+            selStopBits.Enabled = isClose;
+            selHandshake.Enabled = isClose;
+            selReadTimeout.Enabled = isClose;
+            selWriteTimeout.Enabled = isClose;
+
+            openBtn.Enabled = isClose;
+            closeBtn.Enabled = !isClose;
+
+            dataTxGroupBox.Enabled = !isClose;
         }
+
     }
 }

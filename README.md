@@ -4,6 +4,8 @@
 
 ![실행화면](./img/SerialComViewRun.png)
 
+![반복수신](./img/SerialComViewLoopRun.png)
+
 `SerialComView`는 C#과 WinForms을 사용해 개발된 **직렬 통신(Serial Communication)** 애플리케이션입니다. 이 프로그램은 다양한 COM 포트 장비와의 통신을 지원하며, 송수신 데이터를 실시간으로 모니터링할 수 있습니다.  
 
 주요 기능:  
